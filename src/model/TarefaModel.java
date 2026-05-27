@@ -7,6 +7,7 @@ public class TarefaModel {
     private String nome;
     private boolean concluida;
 
+    
     //Construtor---------------------------------
     public TarefaModel(String nome) {
         this.nome = nome;
@@ -22,6 +23,7 @@ public class TarefaModel {
         return concluida;
     }
 
+    
     //Setter-------------------------------------
     public void setNome(String nome) {
         this.nome = nome;
@@ -31,10 +33,12 @@ public class TarefaModel {
         this.concluida = concluida;
     }
 
-    @Override
-    public String toString() {
-        return "TarefaModel{" + " nome=" + nome + ", concluida=" + concluida + '}';
+    
+
+    public String imprimir() {
+        return "Tarefa { " + nome + "}\n{Estado da tarefa: " + (concluida ? "Finalizada" : "Não Concluída")+"}\n";
     }
+    
     
     
     
