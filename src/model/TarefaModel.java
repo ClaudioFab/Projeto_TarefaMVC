@@ -36,7 +36,7 @@ public class TarefaModel {
     
 
     public String imprimir() {
-        return "Tarefa { " + nome + "}\n{Estado da tarefa: " + (concluida ? "Finalizada" : "Não Concluída")+"}\n";
+        return "Tarefa {" + nome + "}\n{Estado da tarefa: " + (concluida ? "Finalizada" : "Não Concluída")+"}\n";
     }
     
     
