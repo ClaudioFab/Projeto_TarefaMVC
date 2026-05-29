@@ -23,11 +23,6 @@ public class TarefaController {
     //Verifica se tarefa ja está em uso ou vazia.
     public boolean verificaTarefa(ArrayList<TarefaModel> lista, String nome) {
 
-        if (nome.equals("")) {
-            JOptionPane.showMessageDialog(null, "Digite o nome da tarefa.\nCadastro negado.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
         for (TarefaModel p : lista) {
 
             if (p.getNome().equalsIgnoreCase(nome)) {
