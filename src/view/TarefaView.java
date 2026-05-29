@@ -12,22 +12,19 @@ public class TarefaView extends javax.swing.JFrame {
 
     public TarefaView() {
         initComponents();
-        
-        
+
     }
-    
 
     //Percorre lista
     public void novaListagem() {
         int cont = 0;
         for (TarefaModel t : controller.listar()) {
-            jTextAreaLista.append("" + ((cont++)+1) + "º ");
-            jTextAreaLista.append(t.imprimir());
+            jTextAreaLista.append(((cont++) + 1) + "º " + t.imprimir1() + "" + t.imprimir2());
             jTextAreaLista.append("\n");
         }
-        
+
         //Lista o número de tarefas em jLabelTotalTarefas
-        jLabelTotalTarefas.setText("Total de tarefas: "+cont);
+        jLabelTotalTarefas.setText("Total de tarefas: " + cont);
 
     }
 
@@ -50,9 +47,9 @@ public class TarefaView extends javax.swing.JFrame {
         jTextAreaLista = new javax.swing.JTextArea();
         jLabelTotalTarefas = new javax.swing.JLabel();
         jPanelBotao = new javax.swing.JPanel();
-        jButtonListarTarefas = new javax.swing.JButton();
         jButtonConcluirTarefa = new javax.swing.JButton();
         jButtonRemoverTarefa = new javax.swing.JButton();
+        jComboBoxLista = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastro de Tarefas");
@@ -138,10 +135,6 @@ public class TarefaView extends javax.swing.JFrame {
         jPanelBotao.setBackground(new java.awt.Color(255, 255, 255));
         jPanelBotao.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jButtonListarTarefas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButtonListarTarefas.setText("Listar");
-        jButtonListarTarefas.addActionListener(this::jButtonListarTarefasActionPerformed);
-
         jButtonConcluirTarefa.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButtonConcluirTarefa.setText("Concluir");
         jButtonConcluirTarefa.addActionListener(this::jButtonConcluirTarefaActionPerformed);
@@ -150,18 +143,23 @@ public class TarefaView extends javax.swing.JFrame {
         jButtonRemoverTarefa.setText("Remover");
         jButtonRemoverTarefa.addActionListener(this::jButtonRemoverTarefaActionPerformed);
 
+        jComboBoxLista.setBackground(new java.awt.Color(0, 0, 0));
+        jComboBoxLista.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jComboBoxLista.setForeground(new java.awt.Color(255, 255, 255));
+        jComboBoxLista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "(Selecione a Tarefa)" }));
+
         javax.swing.GroupLayout jPanelBotaoLayout = new javax.swing.GroupLayout(jPanelBotao);
         jPanelBotao.setLayout(jPanelBotaoLayout);
         jPanelBotaoLayout.setHorizontalGroup(
             jPanelBotaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelBotaoLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jButtonListarTarefas, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBotaoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jComboBoxLista, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
                 .addComponent(jButtonConcluirTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(74, 74, 74)
+                .addGap(20, 20, 20)
                 .addComponent(jButtonRemoverTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addGap(20, 20, 20))
         );
         jPanelBotaoLayout.setVerticalGroup(
             jPanelBotaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,8 +168,8 @@ public class TarefaView extends javax.swing.JFrame {
                 .addGroup(jPanelBotaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRemoverTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonConcluirTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonListarTarefas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                    .addComponent(jComboBoxLista, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -199,13 +197,11 @@ public class TarefaView extends javax.swing.JFrame {
     private void jButtonAdicionarTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarTarefaActionPerformed
         String nome = jTextFieldNome.getText();
 
-        if (nome.equals("")) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro durante o Cadastro!\nCadastro negado.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
+        //controller.verificaTarefa(controller.listar(),nome); ativa "verificaTarefa()"
+        //Verifica se tarefa ja está em uso ou vazia e adiciona ao combobox
+        if (controller.verificaTarefa(controller.listar(), nome) == true) {
+            jComboBoxLista.addItem(nome);
         }
-        
-        //Verifica se tarefa ja está em uso ou vazia.
-        controller.testa(controller.listar());
 
         //Apaga tudo
         apagarTela();
@@ -216,53 +212,70 @@ public class TarefaView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButtonAdicionarTarefaActionPerformed
 
-    private void jButtonListarTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonListarTarefasActionPerformed
-        //Apaga tudo
-        apagarTela();
-
-        //Percorre lista
-        novaListagem();
-
-
-    }//GEN-LAST:event_jButtonListarTarefasActionPerformed
-
     private void jButtonConcluirTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConcluirTarefaActionPerformed
 
-        //procura a tarefa e conclui
-        controller.concluirTarefa(controller.listar());
+        //pega o item selecionado
+        String tarefaFinaliza = jComboBoxLista.getSelectedItem().toString();
+            
+        if (jComboBoxLista.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Selecione uma tarefa.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        //Apaga tudo
-        apagarTela();
+        int exemplo = JOptionPane.showConfirmDialog(null, "Deseja concluir a tarefa {"+tarefaFinaliza+"} ?", "Concluir", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-        //Percorre lista
-        novaListagem();
+        
+        if (exemplo == 0) {
+
+            //procura a tarefa e conclui
+            controller.concluirTarefa(controller.listar(), tarefaFinaliza);
+
+            //Apaga tudo
+            apagarTela();
+
+            //Percorre lista
+            novaListagem();
+
+        } else if (exemplo == 1) {
+            return;
+        }
 
 
     }//GEN-LAST:event_jButtonConcluirTarefaActionPerformed
 
     private void jButtonRemoverTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoverTarefaActionPerformed
 
-        //procura a tarefa e remove
-        controller.pesquisarTarefa(controller.listar());
+        if (jComboBoxLista.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Selecione uma tarefa.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        //pega o item selecionado
+        String tarefaRemova = jComboBoxLista.getSelectedItem().toString();
+
+        //remove do combobox
+        jComboBoxLista.removeItem(tarefaRemova);
+
+        //remove da lista
+        controller.removerTarefa(controller.listar(), tarefaRemova);
 
         //Apaga tudo
         apagarTela();
-
         //Percorre lista
         novaListagem();
 
     }//GEN-LAST:event_jButtonRemoverTarefaActionPerformed
 
-        public static void main(String args[]) {
+    public static void main(String args[]) {
 
-            java.awt.EventQueue.invokeLater(() -> new TarefaView().setVisible(true));
-        }
+        java.awt.EventQueue.invokeLater(() -> new TarefaView().setVisible(true));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdicionarTarefa;
     private javax.swing.JButton jButtonConcluirTarefa;
-    private javax.swing.JButton jButtonListarTarefas;
     private javax.swing.JButton jButtonRemoverTarefa;
+    private javax.swing.JComboBox<String> jComboBoxLista;
     private javax.swing.JLabel jLabelNomeTarefa;
     private javax.swing.JLabel jLabelTotalTarefas;
     private javax.swing.JPanel jPanelBotao;
